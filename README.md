@@ -4,7 +4,7 @@
 ![](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 
-How much good you are at not playing lol. Check the [rest api](https://github.com/rommuloifrn/notlol-api)
+How good you are at not playing lol. Check the [rest api](https://github.com/rommuloifrn/notlol-api)
 
 This project is basically a time counter for the time since you last played League of Legends. It is meant to have two stages:
 
