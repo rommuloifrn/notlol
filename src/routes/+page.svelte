@@ -10,8 +10,8 @@
     async function getData() {
         console.log("start");
         
-        putOnMainElement("loading your request!")
-        //loadingIconSwitch()
+        putOnMainElement("")
+        loadingIconSwitch()
         
         let endpoint = `http://localhost:8080/main?gameName=${nickName}&tagLine=${tagLine}`;
         const response: any = await axios.get(endpoint);
@@ -21,6 +21,7 @@
             `${response.data} days without playing!`
          );
 
+        loadingIconSwitch()
         console.log("finish");
         return null;
     
@@ -31,8 +32,8 @@
 
     function loadingIconSwitch() {
         const loadingIcon = document.getElementById('loadingicon');
-        //loadingIcon!.hidden = !loadingIcon!.hidden;
-        loadingIcon!.hidden = !loadingIcon?.hidden
+        loadingIcon!.hidden = !loadingIcon!.hidden;
+        
     }
 }
 
@@ -52,8 +53,9 @@
         </ul> -->
         <div id="days">
             search some player!
-            <img id="loadingicon" class="h-4 mx-auto" hidden src="loading.gif" alt="">
+            
         </div>
+        <img id="loadingicon" class="h-6 mx-auto" hidden src="loading.gif" alt="">
         <!-- https://svelte.dev/tutorial/svelte/text-inputs -->
         <form onsubmit={()=>{getData}}>
             <input class="focus:outline-none bg-transparent" bind:value={nickName} placeholder="player name" />
