@@ -5,7 +5,7 @@
     let tagLine = $state('')
     let history: any[] = $state([])
 
-    getHistory();
+    updateHistory();
 
         /**
          * @param {any} n
@@ -34,7 +34,7 @@
 
         loadingIconSwitch()
         console.log("finish");
-        getHistory();
+        updateHistory();
         return null;
     }
 
@@ -74,13 +74,21 @@
         }
     }
 
-    function getHistory(){
+    function updateHistory() {
         if(browser) {
             history = JSON.parse(
                 localStorage.getItem('history')!
             )
             history = history.reverse()
         }
+    }
+
+    function clearHistory() {
+        localStorage.setItem(
+            'history',
+            JSON.stringify([])
+        );
+        updateHistory();
     }
 
 </script>
@@ -110,7 +118,7 @@
         </form>
         <div class="mt-10">
             <span class="text-xl font-semibold">
-                search history
+                search history <br> <button class="text-zinc-400 font-normal text-sm hover:underline" onclick={clearHistory}>clear</button>
             </span>
             <ul>
                 {#each history as player}
