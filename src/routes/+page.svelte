@@ -1,7 +1,11 @@
 <script lang="ts">
+    import { browser } from "$app/environment";
     import axios from "axios";
     let nickName = $state('')
     let tagLine = $state('')
+    let history: any[] = $state([])
+
+    getHistory();
 
         /**
          * @param {any} n
@@ -14,17 +18,26 @@
         loadingIconSwitch()
         
         let endpoint = `http://localhost:8080/main?gameName=${nickName}&tagLine=${tagLine}`;
-        const response: any = await axios.get(endpoint);
+        try {
+            const response: any = await axios.get(endpoint);
+
+            putOnMainElement(
+                `${response.data} days without playing!`
+            );
+            saveOnHistory(nickName, tagLine);
+        } catch (error) {
+            console.log(error);
+        }
         
         
-         putOnMainElement(
-            `${response.data} days without playing!`
-         );
+         
 
         loadingIconSwitch()
         console.log("finish");
+        getHistory();
         return null;
-    
+    }
+
     function putOnMainElement(text:any) {
         const daysElement = document.getElementById('days');
         daysElement!.innerHTML = text;
@@ -35,7 +48,40 @@
         loadingIcon!.hidden = !loadingIcon!.hidden;
         
     }
-}
+
+    function saveOnHistory(gameName:string, tagLine:string) {
+        if (localStorage.getItem('history') == null)
+            localStorage.setItem('history', JSON.stringify(
+                [{'gameName':gameName, 'tagLine':tagLine}]
+            ));
+        else {
+            let array: Object[] = JSON.parse(
+                localStorage.getItem('history')!
+            )
+
+            if (array.find((element:any)=>{
+                element.gameName == gameName;
+            })) {
+
+            } else {
+                array.push(
+                    {'gameName':gameName, 'tagLine':tagLine}
+                )
+                localStorage.setItem('history', JSON.stringify(array));
+            }
+
+            
+        }
+    }
+
+    function getHistory(){
+        if(browser) {
+            history = JSON.parse(
+                localStorage.getItem('history')!
+            )
+            history = history.reverse()
+        }
+    }
 
 </script>
 
@@ -60,8 +106,19 @@
         <form onsubmit={()=>{getData}}>
             <input class="focus:outline-none bg-transparent" bind:value={nickName} placeholder="player name" />
             <span class="text-zinc-500">#</span><input class="focus:outline-none bg-transparent" bind:value={tagLine} type="text" name="" id="" placeholder="tagLine"/> <br>
-            <button class="font-semibold bg-red-500 shadow-zinc-900 shadow-lg text-white hover:bg-red-600 transition mt-5 w-full py-2 px-3 text-xl rounded-md" onclick={getData}>Check</button>
+            <button type="submit" class="font-semibold bg-red-500 shadow-zinc-900 shadow-lg text-white hover:bg-red-600 transition mt-5 w-full py-2 px-3 text-xl rounded-md" onclick={getData}>Check</button>
         </form>
+        <div class="mt-10">
+            <span class="text-xl font-semibold">
+                search history
+            </span>
+            <ul>
+                {#each history as player}
+                <li>{player.gameName}#{player.tagLine}</li>
+                {/each}
+            </ul>
+        </div>
     </div>
+    
     
 </div>
